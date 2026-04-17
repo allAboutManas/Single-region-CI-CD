@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "test": "NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
-    "build": "mkdir -p build && tar -czf build/app.tar.gz .",
+    "build": "mkdir -p build && tar --exclude='./build' -czf build/app.tar.gz .",
     "fake-s3": "node scripts/startFakeS3.js",
     "upload-artifact": "node scripts/uploadArtifact.js",
     "list-artifacts": "node scripts/listArtifacts.js"

@@ -1,12 +1,5 @@
 import AWS from 'aws-sdk';
 import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const artifactPath = path.join(__dirname, '../build/app.tar.gz');
 
 const s3 = new AWS.S3({
   endpoint: 'http://127.0.0.1:4569',
@@ -16,12 +9,19 @@ const s3 = new AWS.S3({
   s3ForcePathStyle: true
 });
 
-const fileContent = fs.readFileSync(artifactPath);
+const fileContent = fs.readFileSync('./build/app.tar.gz');
 
-await s3.upload({
+const params = {
   Bucket: 'deployment-artifacts',
-  Key: 'builds/app.tar.gz',
+  Key: 'app.tar.gz',
   Body: fileContent
-}).promise();
+};
 
-console.log('Artifact uploaded successfully');
+s3.upload(params, (err, data) => {
+  if (err) {
+    console.error('Upload failed:', err);
+    process.exit(1);
+  }
+
+  console.log('Upload success:', data.Location);
+});

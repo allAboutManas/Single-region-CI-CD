@@ -8,22 +8,40 @@ const s3 = new AWS.S3({
   sslEnabled: false,
   accessKeyId: '123',
   secretAccessKey: 'abc',
+  region: 'us-east-1',
   s3ForcePathStyle: true
 });
 
-const fileContent = fs.readFileSync('./build/app.tar.gz');
+const bucketName = 'deployment-artifacts';
+const filePath = './build/app.tar.gz';
 
-const params = {
-  Bucket: 'deployment-artifacts',
-  Key: 'app.tar.gz',
-  Body: fileContent
-};
+async function uploadArtifact() {
+  try {
+    // Create bucket if it does not exist
+    try {
+      await s3.createBucket({ Bucket: bucketName }).promise();
+      console.log('Bucket created');
+    } catch (err) {
+      console.log('Bucket may already exist');
+    }
 
-s3.upload(params, (err, data) => {
-  if (err) {
+    // Read artifact file
+    const fileContent = fs.readFileSync(filePath);
+
+    // Use putObject instead of upload
+    await s3.putObject({
+      Bucket: bucketName,
+      Key: 'app.tar.gz',
+      Body: fileContent
+    }).promise();
+
+    console.log('Artifact uploaded successfully');
+    console.log(`Bucket: ${bucketName}`);
+    console.log(`Key: app.tar.gz`);
+  } catch (err) {
     console.error('Upload failed:', err);
     process.exit(1);
   }
+}
 
-  console.log('Upload success:', data.Location);
-});
+uploadArtifact();

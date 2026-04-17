@@ -1,24 +1,21 @@
 pipeline {
     agent any
 
-    tools {
-        nodejs 'node20'
-    }
-
     stages {
 
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/allAboutManas/Single-region-CI-CD.git'
             }
         }
 
-            stage('Check Node Version') {
+        stage('Check Node') {
             steps {
                 sh 'node -v'
                 sh 'npm -v'
             }
         }
+
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
@@ -56,7 +53,7 @@ pipeline {
             }
         }
 
-        stage('Deploy to ap-south-1') {
+        stage('Deploy') {
             steps {
                 sh 'bash scripts/deploy.sh ap-south-1'
             }
@@ -71,7 +68,7 @@ pipeline {
 
     post {
         success {
-            echo 'Single region deployment completed successfully'
+            echo 'Deployment completed successfully'
         }
 
         failure {
@@ -79,5 +76,3 @@ pipeline {
         }
     }
 }
-
-

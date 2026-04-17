@@ -59,7 +59,11 @@ pipeline {
 
         stage('Verify Artifact') {
             steps {
-                sh 'npm run list-artifacts'
+        sh '''
+          export FAKE_S3_ENDPOINT=$(cat fake-s3-endpoint.txt)
+          echo "Using endpoint: $FAKE_S3_ENDPOINT"
+          npm run list-artifacts
+        '''
             }
         }
 

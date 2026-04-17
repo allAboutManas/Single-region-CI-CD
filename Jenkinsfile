@@ -43,13 +43,17 @@ pipeline {
         sh 'nohup npm run fake-s3 > fake-s3.log 2>&1 &'
         sh 'sleep 5'
         sh 'cat fake-s3.log'
-        sh 'lsof -i :4569 || true'
+        sh 'cat fake-s3-endpoint.txt'
             }
         }
 
         stage('Upload Artifact') {
             steps {
-                sh 'npm run upload-artifact'
+        sh '''
+        export FAKE_S3_ENDPOINT=$(cat fake-s3-endpoint.txt)
+        echo "Using endpoint: $FAKE_S3_ENDPOINT"
+        npm run upload-artifact
+        '''
             }
         }
 

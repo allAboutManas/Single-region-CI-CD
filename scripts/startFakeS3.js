@@ -1,4 +1,5 @@
 import FakeS3 from 'fake-s3';
+import fs from 'fs';
 
 const server = new FakeS3({
   buckets: ['deployment-artifacts'],
@@ -7,9 +8,11 @@ const server = new FakeS3({
 
 await server.bootstrap();
 
-console.log(`Fake S3 running at http://${server.hostPort}`);
+const endpoint = `http://${server.hostPort}`;
 
-// Keep the process alive forever
-setInterval(() => {
-  console.log('Fake S3 still running...');
-}, 30000);
+console.log(`Fake S3 running at ${endpoint}`);
+
+// Save endpoint so Jenkins can use it later
+fs.writeFileSync('fake-s3-endpoint.txt', endpoint);
+
+setInterval(() => {}, 1000);

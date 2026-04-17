@@ -5,8 +5,11 @@ const server = new FakeS3({
   prefix: 'artifacts/'
 });
 
-await server.bootstrap(4569);
+await server.bootstrap();
 
-console.log('Fake S3 running at http://127.0.0.1:4569');
+console.log(`Fake S3 running at http://${server.hostPort}`);
 
-process.stdin.resume();
+// Keep the process alive forever
+setInterval(() => {
+  console.log('Fake S3 still running...');
+}, 30000);

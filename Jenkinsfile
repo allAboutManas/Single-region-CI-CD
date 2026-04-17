@@ -40,8 +40,10 @@ pipeline {
 
         stage('Start Fake S3') {
             steps {
-                sh 'nohup npm run fake-s3 > fake-s3.log 2>&1 &'
-                sh 'sleep 5'
+        sh 'nohup npm run fake-s3 > fake-s3.log 2>&1 &'
+        sh 'sleep 5'
+        sh 'cat fake-s3.log'
+        sh 'lsof -i :4569 || true'
             }
         }
 

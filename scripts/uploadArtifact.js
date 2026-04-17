@@ -1,8 +1,10 @@
 import AWS from 'aws-sdk';
 import fs from 'fs';
 
+const endpoint = process.env.FAKE_S3_ENDPOINT || 'http://127.0.0.1:4569';
+
 const s3 = new AWS.S3({
-  endpoint: 'http://127.0.0.1:4569',
+  endpoint,
   sslEnabled: false,
   accessKeyId: '123',
   secretAccessKey: 'abc',

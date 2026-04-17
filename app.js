@@ -21,7 +21,9 @@ app.get('/health', (req, res) => {
 app.get('/api/users', (req, res) => {
   res.status(200).json([
     { id: 1, name: 'Tony' },
-    { id: 2, name: 'Steve' }
+    { id: 2, name: 'Steve' },{
+        id:3,name:'Anil'
+    }
   ]);
 });
 
